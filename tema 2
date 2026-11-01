@@ -1,0 +1,80 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+class Restaurant {
+private:
+    const int id;
+    string denumire;
+    int nrMese;
+    float* incasari;
+
+public:
+    static int nrRestaurante;
+
+    Restaurant() : id(++nrRestaurante) {
+        this->denumire = "Necunoscut";
+        this->nrMese = 0;
+        this->incasari = nullptr;
+    }
+
+    Restaurant(int id, string denumire, int nrMese,
+               float* incasari) : id(id) {
+        this->denumire = denumire;
+        this->nrMese = nrMese;
+        this->incasari = new float[nrMese];
+
+        for (int i = 0; i < nrMese; i++) {
+            this->incasari[i] = incasari[i];
+        }
+
+        nrRestaurante++;
+    }
+
+    void afisareRestaurant() {
+        cout << endl << "Id: " << this->id;
+        cout << endl << "Denumire: " << this->denumire;
+        cout << endl << "Numar mese: " << this->nrMese;
+
+        if (this->nrMese > 0) {
+            cout << endl << "Incasari: ";
+
+            for (int i = 0; i < this->nrMese - 1; i++) {
+                cout << this->incasari[i] << ", ";
+            }
+
+            cout << this->incasari[this->nrMese - 1] << ".";
+        }
+    }
+
+    ~Restaurant() {
+        if (this->incasari != nullptr) {
+            delete[] this->incasari;
+        }
+    }
+};
+
+int Restaurant::nrRestaurante = 0;
+
+int main() {
+    Restaurant r1;
+    r1.afisareRestaurant();
+
+    float* valori = new float[4] {120, 250, 180, 300};
+
+    Restaurant* r2 = new Restaurant(
+        15, "La Terasa", 4, valori
+    );
+
+    r2->afisareRestaurant();
+
+    delete r2;
+    delete[] valori;
+
+    cout << endl << "Am construit "
+         << Restaurant::nrRestaurante
+         << " restaurante!";
+
+    return 0;
+}
