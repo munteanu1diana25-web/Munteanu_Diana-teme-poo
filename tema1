@@ -1,0 +1,80 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+class Hotel {
+private:
+    const int id;
+    string nume;
+    int nrCamere;
+    float* tarife;
+
+public:
+    static int nrHoteluri;
+
+    Hotel() : id(++nrHoteluri) {
+        this->nume = "Standard";
+        this->nrCamere = 0;
+        this->tarife = nullptr;
+    }
+
+    Hotel(int id, string nume, int nrCamere,
+          float* tarife) : id(id) {
+        this->nume = nume;
+        this->nrCamere = nrCamere;
+        this->tarife = new float[nrCamere];
+
+        for (int i = 0; i < nrCamere; i++) {
+            this->tarife[i] = tarife[i];
+        }
+
+        nrHoteluri++;
+    }
+
+    void afisareHotel() {
+        cout << endl << "Id: " << this->id;
+        cout << endl << "Nume: " << this->nume;
+        cout << endl << "Numar camere: " << this->nrCamere;
+
+        if (this->nrCamere > 0) {
+            cout << endl << "Tarife camere: ";
+
+            for (int i = 0; i < this->nrCamere - 1; i++) {
+                cout << this->tarife[i] << ", ";
+            }
+
+            cout << this->tarife[this->nrCamere - 1] << ".";
+        }
+    }
+
+    ~Hotel() {
+        if (this->tarife != nullptr) {
+            delete[] this->tarife;
+        }
+    }
+};
+
+int Hotel::nrHoteluri = 0;
+
+int main() {
+    Hotel h1;
+    h1.afisareHotel();
+
+    float* valori = new float[3] {220, 350, 480};
+
+    Hotel* h2 = new Hotel(
+        25, "Central Palace", 3, valori
+    );
+
+    h2->afisareHotel();
+
+    delete h2;
+    delete[] valori;
+
+    cout << endl << "Am construit "
+         << Hotel::nrHoteluri
+         << " hoteluri!";
+
+    return 0;
+}
